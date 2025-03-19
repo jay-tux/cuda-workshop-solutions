@@ -2,5 +2,7 @@
 # To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements
 
 requirements:
+  - "inipp/1.0.12"
+  - "assimp/5.4.3"
   - "ncurses/6.5"
-  - "stb/cci.20240531"
+  - "stb/cci.20230920"
