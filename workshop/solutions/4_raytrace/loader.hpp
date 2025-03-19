@@ -11,7 +11,7 @@
 
 struct loader
 {
-  static scene_cpu load(const std::string& filename);
+  static scene_cpu load(const std::string& filename, bool &all_okay);
 };
 
 #endif //LOADER_HPP

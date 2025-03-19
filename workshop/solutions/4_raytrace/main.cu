@@ -20,7 +20,14 @@ int main(const int argc, const char **argv) {
     return 0;
   }
 
-  const auto scene = loader::load(argv[1]);
+  bool ok;
+  const auto scene = loader::load(argv[1], ok);
+
+  if (!ok) {
+    std::cerr << "Errors in scene file.\n";
+    return 1;
+  }
+
   scene.dump();
 
   image out { .data = nullptr, .width = 1920, .height = 1080 };
