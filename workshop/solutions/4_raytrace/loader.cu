@@ -9,6 +9,7 @@
 #include <sstream>
 #include <unordered_set>
 #include <unordered_map>
+#include <filesystem>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -125,7 +126,7 @@ triangle from_aiFace(const aiMesh *mesh, const aiFace &face, const size_t id, co
   };
 }
 
-bool parse_mesh(const std::string &name, const inipp::Ini<char>::Section &sec, const size_t id, size_t &mat_id, std::vector<triangle> &out) {
+bool parse_mesh(const std::string &infile, const std::string &name, const inipp::Ini<char>::Section &sec, const size_t id, size_t &mat_id, std::vector<triangle> &out) {
   const auto filename = sec.find("filename");
   if (filename == sec.end()) {
     std::cerr << "Mesh " << name << " has no filename\n";
@@ -141,9 +142,12 @@ bool parse_mesh(const std::string &name, const inipp::Ini<char>::Section &sec, c
   mat_id = std::stoull(material->second);
 
   Assimp::Importer importer;
-  const aiScene *scene = importer.ReadFile(filename->second, aiProcess_Triangulate | aiProcess_GenNormals);
+
+  const auto path = (std::filesystem::absolute(infile).parent_path() / filename->second).string();
+
+  const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals);
   if (!scene) {
-    std::cerr << "Failed to load mesh " << filename->second << "\n";
+    std::cerr << "Failed to load mesh " << filename->second << " (attempted: " << path << ")\n";
     return false;
   }
 
@@ -231,7 +235,7 @@ bool parse_point(const std::string &name, const inipp::Ini<char>::Section &sec, 
   return true;
 }
 
-scene_cpu loader::load(const std::string& filename, bool &all_okay) {
+scene_cpu loader::load(const std::string &filename, bool &all_okay) {
   std::ifstream strm(filename);
   if (!strm) {
     std::cerr << "Failed to open file " << filename << "\n";
@@ -328,7 +332,7 @@ scene_cpu loader::load(const std::string& filename, bool &all_okay) {
           }
         }
         else if (it->second == "mesh") {
-          if(parse_mesh(n, section, id_override, m_id, scene.triangles)) {
+          if(parse_mesh(filename, n, section, id_override, m_id, scene.triangles)) {
             if (!missing_material_ids.contains(m_id) && !material_id_to_idx.contains(m_id)) {
               missing_material_ids.insert(m_id);
             }
