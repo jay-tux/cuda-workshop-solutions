@@ -11,7 +11,6 @@
 #include "loader.hpp"
 #include "kernel.hpp"
 #include "scene.hpp"
-#include <format>
 
 int main(const int argc, const char **argv) {
   if (argc != 4 || argv[1] == std::string("-h")) {
