@@ -1,0 +1,18 @@
+\section{CUDA Workflow}\label{sec:cuda-flow}
+\mkAgenda
+\begin{frame}{CUDA Workflow}
+    \begin{columns}
+        \begin{column}{0.65\textwidth}
+            \begin{itemize}
+                \item<1-> Identify parallel parts of workload
+                \item<2-> Allocate input/output buffers on GPU
+                \item<3-> Copy input from CPU to GPU
+                \item<4-> Start GPU computation
+                \item<5-> Copy output from GPU to CPU
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.3\textwidth}
+            \includegraphics<2->[width=0.9\textwidth]{./figures/cuda_flow}
+        \end{column}
+    \end{columns}
+\end{frame}

@@ -1,0 +1,92 @@
+%! Author = jay
+%! Date = 3/21/25
+
+% Preamble
+\documentclass[11pt]{beamer}
+\usetheme{JuanLesPins}
+\usecolortheme{dolphin}
+\setbeamertemplate{footline}[frame number]
+
+% Packages
+\usepackage{amsmath}
+\usepackage{csquotes}
+\usepackage{blkarray}
+\usepackage{caption3}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{fancyvrb}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{cleveref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[outputdir=../out]{minted}
+\usepackage{pgfplots}
+\usepackage{pgf}
+\usepackage{lmodern}
+\usepackage[absolute,overlay]{textpos}
+
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing} %define styles in graph
+
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+\makeatletter\@ifpackageloaded{underscore}{}{\usepackage[strings]{underscore}
+\usepackage{listings}}\makeatother
+
+\setmintedinline{fontsize=\small}
+\setminted{fontsize=\scriptsize}
+
+\newcommand{\archScale}{1}
+
+\usetikzlibrary{shapes,arrows, positioning, calc, fit}
+\usetikzlibrary{overlay-beamer-styles}
+
+\title{CUDA Introduction}
+\author{Jonas Sys}
+\date{\today}
+
+% Document
+\begin{document}
+    \input{macros}
+
+    \begin{frame}
+        \titlepage
+        \renewcommand{\thefootnote}{}
+        \footnote[frame]{Adapted from (my own) earlier presentation at \url{https://github.com/jay-tux/cuda-presentation}}
+        \renewcommand{\thefootnote}{\arabic{footnote}}
+    \end{frame}
+
+    \begin{frame}{Outline}
+        \tableofcontents
+    \end{frame}
+
+    \include{01_gpus}
+    \include{02_cuda_flow}
+
+    \section{Examples}\label{sec:examples}
+    \mkAgenda
+    \begin{frame}{Examples}
+        \centering \huge
+        Example \#1: Vector Addition
+    \end{frame}
+
+    \begin{frame}{Examples}
+        \centering \huge
+        Example \#2: RGB to Grayscale
+    \end{frame}
+
+    \section{Challenges}\label{sec:challenges}
+    \mkAgenda
+    \begin{frame}{Challenges}
+        \centering {\huge 4 Challenges:}
+        \begin{enumerate}
+            \item Matrix Multiplication
+            \item Image Convolution
+            \item Conway's Game of Life
+            \item Ray Tracing
+        \end{enumerate}
+    \end{frame}
+
+    \include{03_extras}
+\end{document}

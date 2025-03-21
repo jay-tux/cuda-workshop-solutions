@@ -1,0 +1,46 @@
+\newcommand{\smArr}{{Latex[length=0.5mm,width=0.5mm]}}
+\begin{tikzpicture}
+    % Background & grid
+    \fill[blue!20!white] (-1.201,-1.501) rectangle (0,0);
+    \draw[step=0.1cm,blue,very thin] (-1.201,-1.501) grid (0,0);
+    % Central letter
+    \draw (-0.6,-0.75) node[anchor=center,text=Blue] {{\Huge $A$}};
+    % Selected row
+    \draw[blue,rounded corners=0.05cm] (-1.2125,-0.1125) rectangle (0.0125,0.0125);
+    \draw[-\smArr,blue] (0.0125,-0.05) -- (0.0875,-0.05);
+    % Dimensions
+    \draw[\smArr-\smArr,blue,anchor=center] (-1.3,-1.501) -- (-1.3,0);
+    \draw (-1.45,-0.75) node[anchor=center,text=blue] {{\tiny $m$}};
+    \draw[\smArr-\smArr,blue,anchor=center] (-1.201,-1.6) -- (0,-1.6);
+    \draw (-0.6,-1.75) node[anchor=center,text=blue] {{\tiny $n$}};
+
+    % Background & grid
+    \fill[red!20!white] (0.1,0.1) rectangle (1.1,1.3);
+    \draw[step=0.1cm,red,very thin] (0.1,0.1) grid (1.1,1.3);
+    % Central letter
+    \draw (0.6,0.7) node[anchor=center,text=BrickRed] {{\Huge $B$}};
+    % Selected row
+    \draw[BrickRed,rounded corners=0.05cm] (0.0875,0.0875) rectangle (0.2125,1.3125);
+    \draw[-{Latex[length=0.5mm,width=0.5mm]},BrickRed] (0.15,0.0875) -- (0.15,0.0125);
+    % Dimensions
+    \draw[\smArr-\smArr,BrickRed,anchor=center] (1.2,0.1) -- (1.2,1.3);
+    \draw (1.35,0.7) node[anchor=center,text=BrickRed] {{\tiny $n$}};
+    \draw[\smArr-\smArr,BrickRed,anchor=center] (0.1,1.4) -- (1.1,1.4);
+    \draw (0.6,1.55) node[anchor=center,text=BrickRed] {{\tiny $p$}};
+
+    % Background & grid
+    \fill[green!20!white] (0.1,-1.505) rectangle (1.1,0);
+    \draw[step=0.1cm,OliveGreen,very thin] (0.1,-1.505) grid (1.1,0);
+    % Central letter
+    \draw (0.6,-0.75) node[anchor=center,text=OliveGreen] {{\Huge $C$}};
+    % Selected cell
+    \draw[OliveGreen,rounded corners=0.05cm] (0.0875,-0.1125) rectangle (0.2125,0.0125);
+    % Dimensions
+    \draw[\smArr-\smArr,OliveGreen,anchor=center] (1.2,0) -- (1.2,-1.505);
+    \draw (1.35,-0.75) node[anchor=center,text=OliveGreen] {{\tiny $m$}};
+    \draw[\smArr-\smArr,OliveGreen,anchor=center] (0.1,-1.6) -- (1.1,-1.6);
+    \draw (0.6,-1.75) node[anchor=center,text=OliveGreen] {{\tiny $p$}};
+
+    % Formula
+    \draw (-0.6,0.7) node[anchor=center] {{\scriptsize ${\color{Blue} A} \cdot {\color{BrickRed} B} = {\color{OliveGreen} C}$}};
+\end{tikzpicture}

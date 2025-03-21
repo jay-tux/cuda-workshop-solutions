@@ -1,0 +1,101 @@
+\section{Extras}\label{sec:extras}
+\mkAgenda
+
+\subsection{Errors}\label{subsec:errors}
+\begin{frame}[fragile]{Errors}
+    \center
+    \begin{itemize}
+        \item<1-> CUDA functions return \CUDA{cudaError_t}, useful with \CUDA{cudaGetErrorString()}
+    \end{itemize}
+\begin{minted}[breaklines=true]{CUDA}
+#define CHECK(x) do { \
+    const auto _ = (x); \
+    if(_ != cudaSuccess) { \
+        /* ... handle error using cudaGetErrorString(_) */\
+    } \
+} while(false)
+\end{minted}
+\end{frame}
+
+\subsection{Memory}\label{subsec:memory}
+\begin{frame}{Memory}
+    \center
+    \begin{itemize}
+        \item Manage GPU memory
+        \item Allocate with \CUDA{cudaMalloc(void **dev, size_t bytes)}
+        \item Read/Write CPU-side with \CUDA{cudaMemcpy(void *dst, const void *src, size_t bytes, cudaMemcpyKind kind)}
+        \begin{itemize}
+            \item \CUDA{cudaMemcpyDefault}: Inferred based on pointers (CUDA 4+)
+            \item \CUDA{cudaMemcpyHostToDevice}: CPU \textrightarrow GPU
+            \item \CUDA{cudaMemcpyDeviceToHost}: GPU \textrightarrow CPU
+            \item \CUDA{cudaMemcpyDeviceToDevice}: GPU \textrightarrow GPU
+            \item \CUDA{cudaMemcpyHostToHost}: CPU \textrightarrow CPU
+        \end{itemize}
+        \item Unified Memory: \CUDA{cudaMallocManaged(void **dev, size_t bytes)} (accessible on CPU \& GPU)
+        \item Free/Clean up with \CUDA{cudaFree(void *dev)}
+    \end{itemize}
+\end{frame}
+
+\subsection{Synchronization}\label{subsec:synchronization}
+\begin{frame}[fragile]{Synchronization}
+    \center
+    \begin{itemize}
+        \item Atomic functions like \CUDA{atomicAdd}
+        \item Across threads/warps in block: \CUDA{__syncthreads()}
+        \item Make CPU wait for GPU: \CUDA{cudaDeviceSynchronize()}
+        \item More advanced:
+        \begin{itemize}
+            \item Selected threads using \CUDA{cuda::barrier}
+            \item All threads across blocks: \CUDA{this_grid().sync()} (requires Cooperative Groups and launch using \CUDA{cudaLaunchCooperativeKernel})
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{CUDA and OpenGL}\label{subsec:cuda-opengl}
+\begin{frame}[t]{CUDA and OpenGL}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centerline{\includegraphics[height=2cm]{./figures/cuda}}
+            \begin{itemize}
+                \item High-performance GPU compute
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centerline{\includegraphics[height=2cm]{./figures/opengl}}
+            \begin{itemize}
+                \item Real-time 3D graphics
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \centerline{If both are on the same GPU, they can communicate!}
+    \begin{itemize}
+        \item CUDA can read from/write to OpenGL buffers
+        \item OpenGL will use the updated data to render
+        \item That all without using the CPU or any extensive memory copying
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{CUDA and OpenGL}
+    \centerline{\resizebox{0.95\linewidth}{!}{\input{./figures/cuda_gl}}}
+\end{frame}
+
+\begin{frame}[fragile]{CUDA and OpenGL}
+    \center
+    \begin{itemize}
+        \item<1-> \CUDA{__device__} functions can access OpenGL data
+    \end{itemize}
+    \begin{minted}[breaklines=true]{CUDA}
+#include <cuda_gl_interop.h>
+// set up on CPU
+cudaGraphicsResource *resource; T *dev_ptr; size_t size;
+cudaGraphicsGLRegisterBuffer(&resource, handle, cudaGraphicsRegisterFlagsNone);
+cudaGraphicsMapResources(1, &resource);
+cudaGraphicsResourceGetMappedPointer(
+    reinterpret_cast<void **>(&dev_ptr), &size, resource
+);
+// ... do stuff with dev_ptr on GPU
+// clean up on CPU
+cudaGraphicsUnmapResources(1, &resource);
+cudaGraphicsUnregisterResource(resource);
+    \end{minted}
+\end{frame}
